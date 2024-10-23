@@ -1,0 +1,61 @@
+import bpy
+
+API_URL = "http://localhost:30010/remote/object/call"
+
+
+class TechArtCorner_OT(bpy.types.Operator):
+    bl_idname = "tutorial.export"
+    bl_label = "Example Export"
+
+    def send_to_unreal(self, filepath):
+        import requests
+        payload = {
+            "objectPath": "/Engine/PythonTypes.Default__RemoteImporter",
+            "functionName": "import_fbx",
+            "parameters": {
+                "source_path": filepath,
+                "ue_destination": "/Game/Enviro"
+            }
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "insomnia/8.6.1"
+        }
+        try:
+            response = requests.request("PUT", API_URL, json=payload, headers=headers)
+            response.raise_for_status()
+        except Exception as e:
+            print(f"Exception happened! We should handle it! {str(e)}")
+
+    def execute(self, context):
+        filepath = r"Z:\tech art channel\example_meshes\auto_import_mesh.fbx"
+        bpy.ops.export_scene.fbx(filepath=filepath, mesh_smooth_type="FACE",
+                                 object_types={'MESH'}, use_custom_props=True)
+        self.send_to_unreal(filepath)
+        return {"FINISHED"}
+
+
+class PythonAutomationCourse_panel(bpy.types.Panel):
+    bl_idname = "EXAMPLE_PT_Tech_Art_Corner"
+    bl_label = "Example Export"
+    bl_category = "Tech Art Corner"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+
+    def draw(self, context):
+        layout = self.layout
+        op = layout.operator(TechArtCorner_OT.bl_idname, text="Example Export")
+
+
+def register():
+    bpy.utils.register_class(TechArtCorner_OT)
+    bpy.utils.register_class(PythonAutomationCourse_panel)
+
+
+def unregister():
+    bpy.utils.unregister_class(TechArtCorner_OT)
+    bpy.utils.unregister_class(PythonAutomationCourse_panel)
+
+
+if __name__ == "__main__":
+    register()

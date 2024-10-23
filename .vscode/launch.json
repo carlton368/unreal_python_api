@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "UnrealEngine Python",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "Z:\\Program Files\\Epic Games\\UE_5.3\\Engine\\Plugins\\Experimental\\PythonScriptPlugin\\Content\\Python",
+                    "remoteRoot": "Z:\\Program Files\\Epic Games\\UE_5.3\\Engine\\Plugins\\Experimental\\PythonScriptPlugin\\Content\\Python"
+                },
+                {
+                    "localRoot": "Z:\\tech art channel\\PyAutomationCourse 5.3\\MyProject\\Content\\Python\\",
+                    "remoteRoot": "Z:\\tech art channel\\PyAutomationCourse 5.3\\MyProject\\Content\\Python\\"
+                }
+            ],
+            "redirectOutput": true,
+            "justMyCode": false
+        }
+    ]
+}
