@@ -1,14 +1,15 @@
 import bpy
 
-API_URL = "http://localhost:30010/remote/object/call"
+API_URL = "http://localhost:30010/remote/object/call" # 언리얼 엔진 원격 제어 API 주소
 
 
 class TechArtCorner_OT(bpy.types.Operator):
-    bl_idname = "tutorial.export"
-    bl_label = "Example Export"
-
+    bl_idname = "tutorial.export" # bl_idname: Blender 내에서 이 오퍼레이터를 식별하는 고유 ID, # 형식: "카테고리.작업"
+    bl_label = "Example Export" # bl_label: UI에 표시될 오퍼레이터의 이름
     def send_to_unreal(self, filepath):
+        """언리얼 엔진으로 FBX 파일 전송하는 메서드"""
         import requests
+        # API 요청에 필요한 데이터 구성
         payload = {
             "objectPath": "/Engine/PythonTypes.Default__RemoteImporter",
             "functionName": "import_fbx",
@@ -16,11 +17,12 @@ class TechArtCorner_OT(bpy.types.Operator):
                 "source_path": filepath,
                 "ue_destination": "/Game/Enviro"
             }
-        }
+        }# 1. 언리얼 엔진의 원격 임포터 객체 경로. 2. 실행할 임포터 함수 이름 3.함수에 전달할 매개변수들(블렌더에서 내보낸 FBX 파일 경로, 언리얼 엔진에서 저장될 경로)
+        # HTTP 요청 헤더 설정
         headers = {
             "Content-Type": "application/json",
             "User-Agent": "insomnia/8.6.1"
-        }
+        }# 1.전송될 데이터 타입: JSON 2. API 클라이언트 식별
         try:
             response = requests.request("PUT", API_URL, json=payload, headers=headers)
             response.raise_for_status()
@@ -28,10 +30,12 @@ class TechArtCorner_OT(bpy.types.Operator):
             print(f"Exception happened! We should handle it! {str(e)}")
 
     def execute(self, context):
-        filepath = r"Z:\tech art channel\example_meshes\auto_import_mesh.fbx"
+        """오퍼레이터 실행시 호출되는 메서드"""
+        filepath = r"Z:\tech art channel\example_meshes\auto_import_mesh.fbx" # FBX 파일이 저장될 경로 설정
+        # Blender의 FBX 내보내기 실행
         bpy.ops.export_scene.fbx(filepath=filepath, mesh_smooth_type="FACE",
-                                 object_types={'MESH'}, use_custom_props=True)
-        self.send_to_unreal(filepath)
+                                 object_types={'MESH'}, use_custom_props=True) # 1.저장 경로, 2.메쉬 스무딩 방식, 3.내보낼 오브젝트 타입: "MESH", 4.사용자 정의 속성 포함 여부
+        self.send_to_unreal(filepath) # 내보낸 FBX를 언리얼 엔진으로 전송
         return {"FINISHED"}
 
 
