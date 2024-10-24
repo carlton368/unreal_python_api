@@ -28,4 +28,4 @@ def batch_import_textures(destination_path: str, source_folder: str) -> Set[unre
 if __name__ == "__main__":
     imported = batch_import_textures("/Game/Enviro",
                                       r"Z:\tech art channel\example_textures") # 1.언리얼 엔진 내 대상 경로 2.소스 폴더 경로
-    print(imported)
+    print(imported) # 임포트된 에셋들의 집합을 출력합니다
